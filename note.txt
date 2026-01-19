@@ -1,0 +1,6 @@
+- npm init
+- npm init -y
+- npm install express --save.  | --D
+- create Express app
+
+Client Request => Server => Processing => Response => Client  
