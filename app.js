@@ -1,76 +1,42 @@
-const express = require('express')
-const app = express()
-app.use(express.json());
+const express = require('express');
+const app = express();
+// const port = 3000;
 
 
-let staff = [
-    {
-        name: "mgmg",
-        age: 20,
-        salary: 2000,
-        isSingle: true
-    },
-    {
-        name: "koko",
-        age: 23,
-        salary: 2700,
-        isSingle: true
-    },
-    {
-        name: "moemoe",
-        age: 23,
-        salary: 2300,
-        isSingle: false
-    },
-    {
-        name: "ayeaye",
-        age: 23,
-        salary: 2500,
-        isSingle: true
-    }
-
-]
-
-app.get('/', (req, res) => {
-    res.send("Welcom To Node JS")
-})
-
-app.get('/users', (req, res) => {
+app.get("/names", (req, res) => {
     res.json({
-        con: true,
-        msg: "All Staff",
-        result: staff
-    })
-})
-
-app.post('/user', (req, res) => {
-    let newUser = req.body;
-    staff.push(newUser);
-    res.json({
-        con: true,
-        msg: "New Staff Added",
-        result: staff
-    })
-})
-
-app.get('/user/:name',(req,res,next)=> {
-    let queryName = req.params.name;
-    let user = staff.find(s=>s.name === queryName);
-    if(user){
-        res.json({con:true,msg:"Found User",result:user})
-    }else{
-        next(new Error("No User with that name!") )
+        "role": "Web Developer",
+        "interview_type": "strengths_and_weaknesses",
+        "duration_seconds": 40,
+        "strengths": [
+            {
+                "title": "Problem Solving & Implementation",
+                "description": "Experienced in PHP and Laravel-based web systems and CMS development. Able to analyze unclear specifications by reading existing code, identifying impact areas, and implementing stable solutions through API development and feature modifications."
+            },
+            {
+                "title": "Quality-Oriented Development",
+                "description": "Focuses on stable releases by performing unit testing and local verification, ensuring minimal impact on existing functionality."
+            },
+            {
+                "title": "Team Communication",
+                "description": "Has experience coordinating with overseas teams, contributing both technically and through clear communication in Japanese and English."
+            }
+        ],
+        "weakness": {
+            "title": "Overly Careful at Times",
+            "description": "Tends to be overly cautious due to a strong focus on quality.",
+            "improvement": "Improves speed by breaking tasks into smaller units and sharing progress early for review and feedback."
+        },
+        "summary_statement": "A web developer who contributes as an immediate asset through solid backend skills, strong problem-solving ability, and effective team communication, while continuously improving technical expertise."
     }
-    // res.json({ con:true,msg:"Found The User Name",result:staff})
+    );
+    // res.send("List of Names");
+
 })
 
 
-
-
-
-
-
+// app.listen(3000, () => console.log("Server is running"));
 app.listen(3000, () => {
     console.clear();
-    console.log("Server is running")
+    console.log("Server is running");
 })

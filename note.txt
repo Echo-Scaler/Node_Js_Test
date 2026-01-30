@@ -4,3 +4,9 @@
 - create Express app
 
 Client Request => Server => Processing => Response => Client  
+
+Restful API
+- GET
+- POST
+- PUT
+- DELETE
