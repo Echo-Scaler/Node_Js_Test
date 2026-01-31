@@ -66,6 +66,34 @@ app.get('/user/:name/:age', (req, res, next) => {
     // res.json({ con:true,msg:"Found The User Name",result:staff})
 })
 
+app.patch('/user/:name/:salary', (req, res, next) => {
+    let { name, salary } = req.params;
+
+    let userSalary = staff.find(w => w.name === name);
+    if (userSalary) {
+        userSalary.salary = Number(salary);
+        res.json({ cons: true, msg: "Salary Updated", result: userSalary });
+    } else {
+        next(new Error("No User with that name!"))
+    }
+})
+
+app.delete('/user/:name', (req, res, next) => {
+    let { name } = req.params;
+    let foundUser = staff.find(w => w.name === name);
+
+    if (foundUser) {
+        let foundUser = staff.filter(w => w.name != name);
+        res.json({ cons: true, msg: "User Deleted", result: foundUser });
+    } else next(new Error("No User with that name!"))
+})
+
+
+
+
+
+
+
 
 // app.listen(3000, () => console.log("Server is running"));
 app.listen(3000, () => {
