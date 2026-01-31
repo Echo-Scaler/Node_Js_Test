@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Management</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .user-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        form {
+            margin-bottom: 30px;
+            background: #eee;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        input {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Staff Management</h1>
+
+    <form id="addStaffForm">
+        <h3>Add New Staff</h3>
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="number" name="age" placeholder="Age" required>
+        <input type="number" name="salary" placeholder="Salary" required>
+        <label style="margin-left: 10px;">
+            <input type="checkbox" name="isSingle"> Single?
+        </label>
+        <br><br>
+        <button type="submit">Add Staff</button>
+    </form>
+
+    <h2>Staff List</h2>
+    <div id="staffList">Loading...</div>
+
+    <script>
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/users');
+                const data = await response.json();
+                const list = document.getElementById('staffList');
+                list.innerHTML = '';
+
+                if (data.con && data.result) {
+                    data.result.forEach(user => {
+                        if (!user) return;
+                        const div = document.createElement('div');
+                        div.className = 'user-card';
+                        div.innerHTML = `
+                            <strong>${user.name}</strong> (Age: ${user.age})<br>
+                            Salary: $${user.salary}<br>
+                            Status: ${user.isSingle ? 'Single' : 'Married'}
+                        `;
+                        list.appendChild(div);
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+                document.getElementById('staffList').innerText = 'Error loading users.';
+            }
+        }
+
+        fetchUsers();
+
+        document.getElementById('addStaffForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+
+            // Construct the object
+            const data = {
+                name: form.name.value,
+                age: parseInt(form.age.value),
+                salary: parseInt(form.salary.value),
+                isSingle: form.isSingle.checked
+            };
+
+            try {
+                const response = await fetch('/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const resData = await response.json();
+                if (resData.con) {
+                    fetchUsers(); // Refresh list
+                    form.reset(); // Clear form
+                } else {
+                    alert('Error adding user');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Error submitting form');
+            }
+        });
+    </script>
+</body>
+
+</html>

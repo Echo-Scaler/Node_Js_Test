@@ -1,37 +1,69 @@
-const express = require('express');
-const app = express();
-// const port = 3000;
+
+const express = require('express')
+const app = express()
+app.use(express.json());
 
 
-app.get("/names", (req, res) => {
-    res.json({
-        "role": "Web Developer",
-        "interview_type": "strengths_and_weaknesses",
-        "duration_seconds": 40,
-        "strengths": [
-            {
-                "title": "Problem Solving & Implementation",
-                "description": "Experienced in PHP and Laravel-based web systems and CMS development. Able to analyze unclear specifications by reading existing code, identifying impact areas, and implementing stable solutions through API development and feature modifications."
-            },
-            {
-                "title": "Quality-Oriented Development",
-                "description": "Focuses on stable releases by performing unit testing and local verification, ensuring minimal impact on existing functionality."
-            },
-            {
-                "title": "Team Communication",
-                "description": "Has experience coordinating with overseas teams, contributing both technically and through clear communication in Japanese and English."
-            }
-        ],
-        "weakness": {
-            "title": "Overly Careful at Times",
-            "description": "Tends to be overly cautious due to a strong focus on quality.",
-            "improvement": "Improves speed by breaking tasks into smaller units and sharing progress early for review and feedback."
-        },
-        "summary_statement": "A web developer who contributes as an immediate asset through solid backend skills, strong problem-solving ability, and effective team communication, while continuously improving technical expertise."
+let staff = [
+    {
+        name: "mgmg",
+        age: 20,
+        salary: 2000,
+        isSingle: true
+    },
+    {
+        name: "koko",
+        age: 23,
+        salary: 2700,
+        isSingle: true
+    },
+    {
+        name: "moemoe",
+        age: 23,
+        salary: 2300,
+        isSingle: false
+    },
+    {
+        name: "ayeaye",
+        age: 23,
+        salary: 2500,
+        isSingle: true
     }
-    );
-    // res.send("List of Names");
 
+]
+
+app.get('/', (req, res) => {
+    res.send("Welcom To Node JS")
+    // res.sendFile(__dirname + '/index.html');
+})
+
+app.get('/users', (req, res) => {
+    res.json({
+        con: true,
+        msg: "All Staff",
+        result: staff
+    })
+})
+
+app.post('/user', (req, res) => {
+    let newUser = req.body;
+    staff.push(newUser);
+    res.json({
+        con: true,
+        msg: "New Staff Added",
+        result: staff
+    })
+})
+app.get('/user/:name/:age', (req, res, next) => {
+    let { name, age } = req.params;
+    // convert age from string to number for strict comparison
+    let user = staff.find(s => s.name === name && s.age === Number(age));
+    if (user) {
+        res.json({ con: true, msg: "Found User", result: user });
+    } else {
+        next(new Error("No User with that name and age!"));
+    }
+    // res.json({ con:true,msg:"Found The User Name",result:staff})
 })
 
 
